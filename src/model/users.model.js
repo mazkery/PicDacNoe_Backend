@@ -13,6 +13,23 @@ const userSchema = new Schema(
 			type: String,
 			required: true,
 		},
+		isAdmin: {
+			type: Boolean,
+			default: false,
+			required: true,
+		},
+		facebook: {
+			id: String,
+			// token: String,
+			email: String,
+			name: String,
+		},
+		google: {
+			id: String,
+			// token: String,
+			email: String,
+			name: String,
+		},
 	},
 	{
 		timestamps: true,
