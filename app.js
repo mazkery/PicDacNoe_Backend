@@ -3,6 +3,8 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const passport = require('./src/services/user/login/passport');
+const cookieSession = require('cookie-session');
 require('dotenv').config();
 
 const indexRouter = require('./src/routes/index');
@@ -13,14 +15,29 @@ const app = express();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+// app.use(cookieParser());
+// Session
+app.use(
+	cookieSession({
+		name: 'session',
+		keys: ['key1', 'key2'],
+	})
+);
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // connect to MongoDB database
 const uri = process.env.MONGO_URI;
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(uri, {
+	useNewUrlParser: true,
+	useUnifiedTopology: true,
+	useCreateIndex: true,
+});
 
 const connection = mongoose.connection;
 connection.once('open', () => {
