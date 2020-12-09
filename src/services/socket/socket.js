@@ -15,11 +15,15 @@ io.on("connection", (socket) => {
     socket.emit("onlineList", onlineUsers);
   });
 
-  socket.on("disconnect", (username) => {
+  socket.on("offlineUser", (username) => {
     console.log(username + " disconected");
     let index = onlineUsers.indexOf(username);
     onlineUsers.splice(index, 1);
     socket.emit("onlineList", onlineUsers);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("a user disconnected");
   });
 });
 
