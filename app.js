@@ -3,33 +3,28 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
-const passport = require('./src/services/user/login/passport');
-const cookieSession = require('cookie-session');
 require('dotenv').config();
 
+const passport = require('./src/services/user/auth/passport');
+const verifyToken = require('./src/services/user/auth/verifyToken');
 const indexRouter = require('./src/routes/index');
 const usersRouter = require('./src/routes/users');
+const adminRouter = require('./src/routes/admin');
 
 const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(cookieParser());
-// Session
-app.use(
-	cookieSession({
-		name: 'session',
-		keys: ['key1', 'key2'],
-	})
-);
+app.use(cookieParser());
 
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/users', verifyToken.authenticateUser, usersRouter);
+app.use('/admin', verifyToken.authorizeAdmin, adminRouter);
 
 // connect to MongoDB database
 const uri = process.env.MONGO_URI;
@@ -57,7 +52,7 @@ app.use(function (err, req, res, next) {
 
 	// render the error page
 	res.status(err.status || 500);
-	res.send('Error');
+	res.send(err.message);
 });
 
 module.exports = app;

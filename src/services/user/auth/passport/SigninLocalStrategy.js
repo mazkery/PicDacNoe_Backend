@@ -18,7 +18,7 @@ const SigninLocalStatergy = new LocalStrategy(function (
 				})
 				.catch((error) => done(error));
 		})
-		.catch((error) => done(error));
+		.catch((error) => done(error, false, error.message));
 });
 
 module.exports = SigninLocalStatergy;

@@ -6,13 +6,10 @@ const userSchema = new Schema(
 		username: {
 			type: String,
 			unique: true,
-			trim: true,
-			lowercase: true,
 			required: true,
 		},
 		password: {
 			type: String,
-			required: true,
 		},
 		isAdmin: {
 			type: Boolean,
@@ -21,13 +18,11 @@ const userSchema = new Schema(
 		},
 		facebook: {
 			id: String,
-			// token: String,
 			email: String,
 			name: String,
 		},
 		google: {
 			id: String,
-			// token: String,
 			email: String,
 			name: String,
 		},
@@ -38,8 +33,10 @@ const userSchema = new Schema(
 );
 
 userSchema.pre('save', async function (next) {
-	const hash = await bcrypt.hash(this.password, 10);
-	this.password = hash;
+	if (this.password) {
+		const hash = await bcrypt.hash(this.password, 10);
+		this.password = hash;
+	}
 	next();
 });
 
