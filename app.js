@@ -53,7 +53,6 @@ var io = require("socket.io")(server, {
   },
 });
 io.on("connection", (socket) => {
-  debugger;
   socket.on("online", (data) => console.log(data));
 
   socket.on("disconnect", () => {
