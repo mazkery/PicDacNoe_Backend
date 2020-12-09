@@ -45,6 +45,22 @@ connection.once("open", () => {
   console.log("MongoDB database connection established successfully.");
 });
 
+// Socket set up
+var server = require("http").createServer(app);
+var io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+  },
+});
+io.on("connection", (socket) => {
+  debugger;
+  socket.on("online", (data) => console.log(data));
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
@@ -61,4 +77,4 @@ app.use(function (err, req, res, next) {
   res.send("Error");
 });
 
-module.exports = app;
+module.exports = { app, server };
