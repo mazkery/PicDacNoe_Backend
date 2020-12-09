@@ -3,6 +3,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const cors = require('cors');
 require('dotenv').config();
 
 const passport = require('./src/services/user/auth/passport');
@@ -14,6 +15,13 @@ const adminRouter = require('./src/routes/admin');
 const app = express();
 
 app.use(logger('dev'));
+app.use(
+	cors({
+		origin: process.env.CLIENT_URL, // allow to server to accept request from different origin
+		methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+		// credentials: true, // allow session cookie from browser to pass through
+	})
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
