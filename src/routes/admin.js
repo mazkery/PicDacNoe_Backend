@@ -8,7 +8,7 @@ router.get('/', function (req, res, next) {
 
 router.get('/profile', (req, res, next) => {
 	res.json({
-		message: 'You made it to the User route',
+		message: 'You made it to the Admin route',
 		user: req.user,
 	});
 });
