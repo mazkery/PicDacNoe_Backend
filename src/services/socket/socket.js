@@ -1,29 +1,28 @@
 const app = require("../../../app");
-let onlineUsers = [];
+let onlineUsers = {};
 
 // Socket set up
-var server = require("http").createServer(app);
-var io = require("socket.io")(server, {
+const server = require("http").createServer(app);
+const io = require("socket.io")(server, {
   cors: {
     origin: "*",
   },
 });
+
 io.on("connection", (socket) => {
+  console.log("a user connected");
+
   socket.on("onlineUser", (username) => {
     console.log(username);
-    onlineUsers.push(username);
-    socket.emit("onlineList", onlineUsers);
-  });
 
-  socket.on("offlineUser", (username) => {
-    console.log(username + " disconected");
-    let index = onlineUsers.indexOf(username);
-    onlineUsers.splice(index, 1);
-    socket.emit("onlineList", onlineUsers);
+    onlineUsers[socket.id] = username;
+    io.emit("onlineList", onlineUsers);
   });
 
   socket.on("disconnect", () => {
-    console.log("a user disconnected");
+    console.log("user " + onlineUsers[socket.id] + " disconnected");
+    delete onlineUsers[socket.id];
+    io.emit("onlineList", onlineUsers);
   });
 });
 
