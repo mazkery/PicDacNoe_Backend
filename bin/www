@@ -19,7 +19,7 @@ app.set("port", port);
  * Create HTTP server.
  */
 
-var server = require("../src/services/socket/socket");
+var server = require("../src/services/socket/socket").server;
 
 /**
  * Listen on provided port, on all network interfaces.

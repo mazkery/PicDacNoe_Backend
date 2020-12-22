@@ -9,6 +9,7 @@ const io = require("socket.io")(server, {
   },
 });
 
+// Socket Implement
 io.on("connection", (socket) => {
   console.log("a user connected");
 
@@ -24,6 +25,10 @@ io.on("connection", (socket) => {
     delete onlineUsers[socket.id];
     io.emit("onlineList", onlineUsers);
   });
+
+  socket.on("send-message", (messagePackage) => {
+    io.to(messagePackage.room).emit("message", messagePackage.text);
+  });
 });
 
-module.exports = server;
+module.exports = { server, io };
