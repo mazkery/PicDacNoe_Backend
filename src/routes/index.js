@@ -18,6 +18,20 @@ router.get('/', function (req, res, next) {
 	"lname": "...",
 	"password": "..."
 }
+SUCESS
+res.header({ token: token });
+res.json({
+	message: info,
+	user: {
+		id: user._id,
+		name: user.name,
+		token,
+	},
+}
+FAILED
+res.status(500).json({
+	message: info || 'Signup Error',
+});
  */
 
 router.post('/signup', logUser.signup);
@@ -28,6 +42,20 @@ router.post('/signup', logUser.signup);
 	"email": "...",
 	"password": "..."
 }
+SUCCES
+res.header({ token: token });
+return res.json({
+	info,
+	user: {
+		id: user._id,
+		name: user.name,
+		token,
+	},
+});
+FAILED
+res.status(500).json({
+	message: info || 'Signin Error',
+});
  */
 router.post('/signin', logUser.signin);
 
@@ -39,6 +67,20 @@ router.post('/signin', logUser.signin);
 	 "fname": "...",
 	 "lname": "..."
  }
+ SUCCESS
+ res.header({ token: token });
+ res.json({
+		info,
+		user: {
+			id: user._id,
+			name: user.name,
+			token,
+		},
+	});
+	FAILED
+ res.status(500).json({
+		message: info || 'Google Auth Error',
+	});
  */
 
 router.post('/auth/google', logUser.googleAuth);
@@ -51,6 +93,20 @@ router.post('/auth/google', logUser.googleAuth);
 	 "fname": "...",
 	 "lname": "..."
  }
+SUCCESS
+ res.header({ token: token });
+ res.json({
+		info,
+		user: {
+			id: user._id,
+			name: user.name,
+			token,
+		},
+	});
+FAILED
+ res.status(500).json({
+		message: info || 'Google Auth Error',
+	});
  */
 
 router.post('/auth/facebook', logUser.facebookAuth);
@@ -58,6 +114,14 @@ router.post('/auth/facebook', logUser.facebookAuth);
 /**
  * Verify user
  * attach token to header
+SUCCESS
+ res.json({
+		message: info,
+	});
+FAILED
+res.status(500).json({
+		message: info || 'Verify Error',
+});
  */
 
 router.get('/verify', verifyToken.verifyUser);
@@ -65,6 +129,14 @@ router.get('/verify', verifyToken.verifyUser);
 /**
  * Verify admin
  * attach token to header
+SUCCESS
+res.json({
+		message: info,
+});
+FAILED
+res.status(500).json({
+		message: info || 'Verify Error',
+});
  */
 
 router.get('/verify/admin', verifyToken.verifyAdmin);

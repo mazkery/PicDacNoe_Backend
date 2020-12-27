@@ -13,7 +13,7 @@ exports.signup = (req, res, next) => {
 		});
 		res.header({ token: token });
 		return res.json({
-			info,
+			message: info,
 			user: {
 				id: user._id,
 				name: user.name,
