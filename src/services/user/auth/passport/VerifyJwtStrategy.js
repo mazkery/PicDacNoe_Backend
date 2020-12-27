@@ -11,12 +11,12 @@ const VerifyJwtStrategy = new JwtStrategy(ops, function (jwt_payload, done) {
 	User.findById(jwt_payload.user.id)
 		.then((user) => {
 			if (user) {
-				return done(null, user);
+				return done(null, user, 'Token verified.');
 			} else {
-				return done(null, false);
+				return done(null, false, 'False token');
 			}
 		})
-		.catch((err) => done(err, false));
+		.catch((err) => done(err, false, err.message));
 });
 
 module.exports = VerifyJwtStrategy;

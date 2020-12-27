@@ -16,7 +16,7 @@ exports.signup = (req, res, next) => {
 			info,
 			user: {
 				id: user._id,
-				username: user.username,
+				name: user.name,
 				token,
 			},
 		});
@@ -27,7 +27,7 @@ exports.signin = (req, res, next) =>
 	passport.authenticate('local-signin', (error, user, info) => {
 		if (error || !user) {
 			return res.status(500).json({
-				message: info.message || 'Signin Error',
+				message: info || 'Signin Error',
 			});
 		}
 		const token = generateAccessToken({
@@ -38,7 +38,7 @@ exports.signin = (req, res, next) =>
 			info,
 			user: {
 				id: user._id,
-				username: user.username,
+				name: user.name,
 				token,
 			},
 		});
@@ -59,7 +59,7 @@ exports.googleAuth = (req, res, next) => {
 			info,
 			user: {
 				id: user._id,
-				username: user.username,
+				name: user.name,
 				token,
 			},
 		});
@@ -81,7 +81,7 @@ exports.facebookAuth = (req, res, next) => {
 			info,
 			user: {
 				id: user._id,
-				username: user.username,
+				name: user.name,
 				token,
 			},
 		});
