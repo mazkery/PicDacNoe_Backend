@@ -12,7 +12,12 @@ router.get('/', function (req, res, next) {
 /* POST /signup */
 router.post('/signup', logUser.signup);
 
-/* POST /signin */
+/* POST /signin 
+{
+	"username": "",
+	"password": ""
+}
+*/
 router.post('/signin', logUser.signin);
 
 router.post('/auth/google', logUser.googleAuth);
