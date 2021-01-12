@@ -112,7 +112,7 @@ FAILED
 router.post('/auth/facebook', logUser.facebookAuth);
 
 /**
- * Verify user
+ * GET /verify
  * attach token to header
 SUCCESS
  res.json({
@@ -126,7 +126,7 @@ res.status(500).json({
 
 router.get('/verify', verifyToken.verifyUser);
 
-/**
+/** GET /verify-admin
  * Verify admin
  * attach token to header
 SUCCESS
@@ -139,20 +139,18 @@ res.status(500).json({
 });
  */
 
-router.get('/verify/admin', verifyToken.verifyAdmin);
+router.get('/verify-admin', verifyToken.verifyAdmin);
 
 /**
- * Load user profile
+ * GET /user-profile
  * attach token to header
-SUCCESS
-res.json({
-		message: 'Successfully get user profile.',
-		user: req.user,
-});
-FAILED
-res.status(500).json({
-		message: info || 'Verify Error',
-});
+ * SUCCESS
+ * res.json({
+ * 		message: 'Successfully get user profile.',
+ * 		user: req.user,
+ * });
+ * FAILED
+ *	Unauthorized
  */
 
 router.get('/user-profile', verifyToken.authenticateUser, (req, res, next) => {
