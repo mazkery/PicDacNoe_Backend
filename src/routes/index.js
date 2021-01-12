@@ -141,4 +141,25 @@ res.status(500).json({
 
 router.get('/verify/admin', verifyToken.verifyAdmin);
 
+/**
+ * Load user profile
+ * attach token to header
+SUCCESS
+res.json({
+		message: 'Successfully get user profile.',
+		user: req.user,
+});
+FAILED
+res.status(500).json({
+		message: info || 'Verify Error',
+});
+ */
+
+router.get('/user-profile', verifyToken.authenticateUser, (req, res, next) => {
+	res.json({
+		message: 'Successfully get user profile.',
+		user: req.user,
+	});
+});
+
 module.exports = router;
