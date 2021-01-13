@@ -1,5 +1,7 @@
 const app = require("../../../app");
 let onlineUsers = {};
+let onlineRoom = [];
+let roomIn = {};
 
 // Socket set up
 const server = require("http").createServer(app);
@@ -11,19 +13,31 @@ const io = require("socket.io")(server, {
 
 // Socket Implement
 io.on("connection", (socket) => {
-  console.log("a user connected");
-
   socket.on("onlineUser", (username) => {
-    console.log(username);
+    if (username != null) {
+      onlineUsers[socket.id] = username;
+    }
 
-    onlineUsers[socket.id] = username;
     io.emit("onlineList", onlineUsers);
+    io.emit("onlineRoom", onlineRoom);
+    console.log(onlineRoom);
+  });
+
+  socket.on("createRoom", (roomId) => {
+    console.log("New roomId: " + roomId);
+    if (!onlineRoom.includes(roomId)) {
+      roomIn[socket.id] = roomId;
+      onlineRoom.push(roomId);
+
+      io.emit("onlineRoom", onlineRoom);
+    }
   });
 
   socket.on("disconnect", () => {
-    console.log("user " + onlineUsers[socket.id] + " disconnected");
-    delete onlineUsers[socket.id];
-    io.emit("onlineList", onlineUsers);
+    if (onlineUsers.hasOwnProperty(socket.id)) {
+      delete onlineUsers[socket.id];
+      io.emit("onlineList", onlineUsers);
+    }
   });
 
   socket.on("send-message", (messagePackage) => {
