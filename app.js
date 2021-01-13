@@ -11,6 +11,7 @@ const verifyToken = require('./src/services/user/auth/verifyToken');
 const indexRouter = require('./src/routes/index');
 const usersRouter = require('./src/routes/users');
 const adminRouter = require('./src/routes/admin');
+const gameMatchRouter = require('./src/routes/game-match');
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/users', verifyToken.authenticateUser, usersRouter);
 app.use('/admin', verifyToken.authorizeAdmin, adminRouter);
+app.use('/game-match', gameMatchRouter);
 
 // connect to MongoDB database
 const uri = process.env.MONGO_URI;
