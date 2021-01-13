@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const logUser = require('../services/user/auth/logUser');
 const verifyToken = require('../services/user/auth/verifyToken');
+const User = require('../model/users.model');
 
 /* GET / */
 router.get('/', function (req, res, next) {
@@ -156,6 +157,26 @@ router.get('/user-profile', verifyToken.authenticateUser, (req, res, next) => {
 		message: 'Successfully get user profile.',
 		user: req.user,
 	});
+});
+
+/**
+ * Forget password
+ * POST /forget-password
+ * 	{
+			"id": ...,
+			"password": ....,
+		}
+ */
+router.post('/forget-password', async (req, res, next) => {
+	const user = await User.findById(req.body.id);
+	if (!user) res.status(500).json({ message: 'User not found.' });
+	else {
+		user.password = req.body.password;
+		user
+			.save()
+			.then((savedUser) => res.json({ message: 'Password updated.', user: savedUser }))
+			.catch((error) => res.status(500).json({ message: error.message }));
+	}
 });
 
 module.exports = router;
