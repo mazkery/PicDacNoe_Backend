@@ -182,5 +182,16 @@ router.post('/forget-password', async (req, res, next) => {
 /**
  * GET /top-10-player
  */
+router.get('/top-10-player', (req, res, next) => {
+	User.find()
+		.sort({ 'game.win': 'desc' })
+		.limit(10)
+		.exec((err, users) => {
+			if (err) res.status(500).json({ message: err.message });
+			else {
+				res.json({ message: 'Top 10 players.', count: users.length, users });
+			}
+		});
+});
 
 module.exports = router;

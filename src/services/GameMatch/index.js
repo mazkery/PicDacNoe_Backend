@@ -52,10 +52,11 @@ exports.saveGameMatchAndResult = async function (req, res, next) {
 };
 
 /**
- * /game-match/:gameId
+ *
  * */
 exports.getGameHistory = async function (req, res, next) {
-	const gameMatch = await GameMatch.findOne({ gameId: req.params.gameId }).exec();
+	const gameId = req.body.gameId;
+	const gameMatch = await GameMatch.findOne({ gameId }).exec();
 	if (!GameMatch) return res.status(500).json({ message: 'Game match not found.' });
 	return res.json({ message: 'Fetch Game History', gameMatch });
 };

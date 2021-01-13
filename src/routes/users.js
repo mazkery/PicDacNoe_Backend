@@ -36,4 +36,16 @@ router.post('/change-status', function (req, res, next) {
 		.catch((error) => res.status(500).json({ message: error.message }));
 });
 
+/**
+ * GET /users/all
+ */
+router.get('/all', function (req, res, next) {
+	User.find({}, (err, users) => {
+		if (err) res.status(500).json({ message: err.message });
+		else {
+			res.json({ message: 'Fetch all users.', count: users.length, users });
+		}
+	});
+});
+
 module.exports = router;
