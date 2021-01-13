@@ -33,7 +33,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', indexRouter);
-app.use('/users', verifyToken.authenticateUser, usersRouter);
+app.use('/users', usersRouter);
 app.use('/admin', verifyToken.authorizeAdmin, adminRouter);
 app.use('/game-match', gameMatchRouter);
 app.use('/email', emailRouter);
