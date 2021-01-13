@@ -13,6 +13,10 @@ const GameMatch = require('../../model/gameMatch.model');
  * }
  */
 exports.saveGameMatchAndResult = async function (req, res, next) {
+	const gameMatch = await GameMatch.findOne({ gameId });
+	if (gameMatch) {
+		return res.json({ message: 'Match history save.', gamematch });
+	}
 	const player1Id = req.body.player1;
 	const player2Id = req.body.player2;
 	const gameId = req.body.gameId;

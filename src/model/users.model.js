@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
-const GameMatch = require('./gameMatch.model');
+
 const userSchema = new Schema(
 	{
 		name: { type: String, required: true },
 		email: { type: String, required: true, unique: true },
+		confirmed: { type: Boolean, default: false },
 		password: { type: String },
 		isAdmin: { type: Boolean, default: false, required: true },
 		facebook: { id: String, email: String },

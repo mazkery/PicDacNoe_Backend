@@ -12,6 +12,7 @@ const indexRouter = require('./src/routes/index');
 const usersRouter = require('./src/routes/users');
 const adminRouter = require('./src/routes/admin');
 const gameMatchRouter = require('./src/routes/game-match');
+const emailRouter = require('./src/routes/email');
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use('/', indexRouter);
 app.use('/users', verifyToken.authenticateUser, usersRouter);
 app.use('/admin', verifyToken.authorizeAdmin, adminRouter);
 app.use('/game-match', gameMatchRouter);
+app.use('/email', emailRouter);
 
 // connect to MongoDB database
 const uri = process.env.MONGO_URI;
