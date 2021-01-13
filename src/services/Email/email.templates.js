@@ -4,7 +4,7 @@ module.exports = {
 	confirm: (id) => ({
 		subject: 'React Confirm Email',
 		html: `
-      <a href='${CLIENT_ORIGIN}/confirm/${id}'>
+      <a href='${CLIENT_ORIGIN}'>
         click to confirm email
       </a>
     `,
