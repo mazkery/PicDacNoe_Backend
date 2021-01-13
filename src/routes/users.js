@@ -7,11 +7,14 @@ const User = require('../model/users.model');
 		"email": ...
 	}
 */
-router.get('/profile', async function (req, res, next) {
+router.post('/profile', function (req, res, next) {
 	const email = req.body.email;
-	const user = User.findOne({ email });
-	if (!user) return res.status(500).json({ message: 'Cannot found user.' });
-	return res.json({ message: 'Found user successfully.', user });
+	User.findOne({ email })
+		.then((user) => {
+			if (!user) return res.status(500).json({ message: 'Cannot found user.' });
+			return res.json({ message: 'Found user successfully.', user });
+		})
+		.catch((error) => res.status(500).json({ message: error.message }));
 });
 
 module.exports = router;
