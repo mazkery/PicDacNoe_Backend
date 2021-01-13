@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
-const AutoIncrement = require('mongoose-sequence')(mongoose);
 const Schema = mongoose.Schema;
-const User = require('./users.model');
 
 const GameMatchSchema = new Schema(
 	{
@@ -11,12 +9,11 @@ const GameMatchSchema = new Schema(
 		squares: { type: String },
 		winline: { type: String },
 		winner: { type: Schema.Types.ObjectId, ref: 'User' },
-		isActive: { type: Boolean, default: true },
+		loser: { type: Schema.Types.ObjectId, ref: 'User' },
 	},
 	{
 		timestamps: true,
 	}
 );
-GameMatchSchema.plugin(AutoIncrement, { inc_field: 'gameId' });
 
 module.exports = mongoose.model('gameMatch', GameMatchSchema);

@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('../services/user/auth/passport');
-const jwt = require('jsonwebtoken');
 const logUser = require('../services/user/auth/logUser');
 const verifyToken = require('../services/user/auth/verifyToken');
+const User = require('../model/users.model');
 
 /* GET / */
 router.get('/', function (req, res, next) {
@@ -158,6 +157,41 @@ router.get('/user-profile', verifyToken.authenticateUser, (req, res, next) => {
 		message: 'Successfully get user profile.',
 		user: req.user,
 	});
+});
+
+/**
+ * Forget password
+ * POST /forget-password
+ * 	{
+			"id": ...,
+			"password": ....,
+		}
+ */
+router.post('/forget-password', async (req, res, next) => {
+	const user = await User.findById(req.body.id);
+	if (!user) res.status(500).json({ message: 'User not found.' });
+	else {
+		user.password = req.body.password;
+		user
+			.save()
+			.then((savedUser) => res.json({ message: 'Password updated.', user: savedUser }))
+			.catch((error) => res.status(500).json({ message: error.message }));
+	}
+});
+
+/**
+ * GET /top-10-player
+ */
+router.get('/top-10-player', (req, res, next) => {
+	User.find()
+		.sort({ 'game.win': 'desc' })
+		.limit(10)
+		.exec((err, users) => {
+			if (err) res.status(500).json({ message: err.message });
+			else {
+				res.json({ message: 'Top 10 players.', count: users.length, users });
+			}
+		});
 });
 
 module.exports = router;
