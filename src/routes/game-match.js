@@ -15,7 +15,18 @@ const { saveGameMatchAndResult, getGameHistory } = require('../services/GameMatc
  * */
 router.post('/save', saveGameMatchAndResult);
 
-/* GET /game-match/:gameId */
+/**
+ * GET /game-match/:gameId 
+ * gameId: { type: Number, required: true },
+	player1: { type: Schema.Types.ObjectId, ref: 'User' },
+	player2: { type: Schema.Types.ObjectId, ref: 'User' },
+	squares: { type: String },
+	winline: { type: String },
+	winner: { type: Schema.Types.ObjectId, ref: 'User' },
+	loser: { type: Schema.Types.ObjectId, ref: 'User' },
+ * 
+ * 
+ *  */
 router.get('/:gameId', getGameHistory);
 
 module.exports = router;

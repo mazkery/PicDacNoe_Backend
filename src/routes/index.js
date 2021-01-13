@@ -179,4 +179,8 @@ router.post('/forget-password', async (req, res, next) => {
 	}
 });
 
+/**
+ * GET /top-10-player
+ */
+
 module.exports = router;

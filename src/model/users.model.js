@@ -7,6 +7,7 @@ const userSchema = new Schema(
 		name: { type: String, required: true },
 		email: { type: String, required: true, unique: true },
 		confirmed: { type: Boolean, default: false },
+		active: { type: Boolean, default: true },
 		password: { type: String },
 		isAdmin: { type: Boolean, default: false, required: true },
 		facebook: { id: String, email: String },
