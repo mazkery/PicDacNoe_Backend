@@ -39,6 +39,7 @@ exports.signin = (req, res, next) =>
 			user: {
 				id: user._id,
 				name: user.name,
+				isAdmin: user.isAdmin,
 				token,
 			},
 		});
