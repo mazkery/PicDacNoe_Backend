@@ -65,7 +65,7 @@ io.on("connection", (socket) => {
       subRoom[socket.id] = displayRoomId;
 
       // emit ve room co the bat dau
-      io.to(displayRoomId).emit(displayRoomId, {
+      io.to(displayRoomId).emit("gameInfo", {
         label: "opponent",
         name: name,
       });
