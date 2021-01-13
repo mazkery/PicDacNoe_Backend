@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
+const GameMatch = require('./gameMatch.model');
 const userSchema = new Schema(
 	{
 		name: { type: String, required: true },
@@ -9,6 +10,13 @@ const userSchema = new Schema(
 		isAdmin: { type: Boolean, default: false, required: true },
 		facebook: { id: String, email: String },
 		google: { id: String, email: String },
+		game: {
+			win: { type: Number, default: 0 },
+			lose: { type: Number, default: 0 },
+			draw: { type: Number, default: 0 },
+			total: { type: Number, default: 0 },
+			matches: [{ type: Schema.Types.ObjectId, ref: 'GameMatch' }],
+		},
 	},
 	{
 		timestamps: true,
@@ -16,6 +24,7 @@ const userSchema = new Schema(
 );
 
 userSchema.pre('save', async function (next) {
+	if (!this.isModified('password')) return next();
 	if (this.password) {
 		const hash = await bcrypt.hash(this.password, 10);
 		this.password = hash;
