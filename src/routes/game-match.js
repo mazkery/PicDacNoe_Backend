@@ -15,7 +15,7 @@ const { saveGameMatchAndResult, getGameHistory } = require('../services/GameMatc
  * */
 router.post('/save', saveGameMatchAndResult);
 
-/* GET /gameId */
+/* GET /game-match/:gameId */
 router.get('/:gameId', getGameHistory);
 
 module.exports = router;
