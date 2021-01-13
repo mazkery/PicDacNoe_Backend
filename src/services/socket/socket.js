@@ -26,9 +26,9 @@ const io = require("socket.io")(server, {
 // Socket Implement
 io.on("connection", (socket) => {
   //Them user vao danh sach online
-  socket.on("onlineUser", (username) => {
-    if (username != null) {
-      onlineUsers[socket.id] = username;
+  socket.on("onlineUser", (email) => {
+    if (email != null) {
+      onlineUsers[socket.id] = email;
     }
 
     io.emit("onlineList", onlineUsers);
@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("joinRoom", (displayRoomId, username) => {
+  socket.on("joinRoom", (displayRoomId, email) => {
     // Kiem tra roomId ton tai va join vao room
     if (onlineRooms.includes(displayRoomId)) {
       socket.join(roomIdMapping[displayRoomId]);
@@ -60,33 +60,23 @@ io.on("connection", (socket) => {
       opponent[displayRoomId] = socket.id;
 
       // emit ve room co the bat dau
-      io.emit(displayRoomId, username);
+      io.emit(displayRoomId, email);
     }
   });
 
-  socket.on("leaveRoom", () => {
-    // Neu chu room roi phong thi xoa cac socket con lai trong room
-    if (headRoom.hasOwnProperty(socket.id)) {
-      removeAllMember();
-    } else {
-      //Neu la doi thu
-      if (opponent[displayRoomId] === socket.id) {
-        // Xu ly thang thua ben trong
-      } else {
-        socket.leave(roomIdMapping.roomIn[socket.id]);
-      }
-    }
+  socket.on("leaveRoom", (displayRoomId) => {
+    leaveRoomByUser(socket, displayRoomId);
+  });
+
+  // Unregister cho tung thanh vien trong room (khong phai player)
+  socket.on("removedRoom", (displayRoomId) => {
+    socket.leave(roomIdMapping.displayRoomId);
   });
 
   socket.on("disconnect", () => {
     let displayRoomId = roomIn[socket.id];
 
-    // Neu chu room exit phong thi xoa cac socket con lai trong room
-    if (headRoom.hasOwnProperty(socket.id)) {
-      removeAllMember(io, displayRoomId);
-    } else {
-      socket.leave(roomIdMapping.displayRoomId);
-    }
+    leaveRoomByUser(socket, displayRoomId);
 
     delete onlineUsers[socket.id];
     io.emit("onlineList", onlineUsers);
@@ -98,10 +88,8 @@ io.on("connection", (socket) => {
 });
 
 function removeAllMember(io, displayRoomId) {
-  debugger;
-  io.sockets.clients(roomIdMapping.displayRoomId).forEach((s) => {
-    s.leave(roomIdMapping.displayRoomId);
-  });
+  //Emit ve fe de out room
+  io.emit("removedRoom", displayRoomId);
   //Xoa tham chieu
   delete roomIdMapping.displayRoomId;
   //Xoa khoi onlineRooms
@@ -111,6 +99,20 @@ function removeAllMember(io, displayRoomId) {
   //Cap nhat lai danh sach onlineRooms cho client
   io.emit("onlineRooms", onlineRooms);
   console.log(onlineRooms);
+}
+
+function leaveRoomByUser(socket, displayRoomId) {
+  // Neu chu room roi phong thi xoa cac socket con lai trong room
+  if (headRoom.hasOwnProperty(socket.id)) {
+    removeAllMember();
+  } else {
+    //Neu la doi thu
+    if (opponent[displayRoomId] === socket.id) {
+      // Xu ly thang thua ben trong
+    } else {
+      socket.leave(roomIdMapping[roomIn[socket.id]]);
+    }
+  }
 }
 
 module.exports = { server, io };
